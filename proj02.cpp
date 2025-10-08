@@ -65,9 +65,10 @@ float	NowTemp;		// temperature this month
 float	NowHeight;		// grain height in inches
 int	NowNumDeer;		// number of deer in the current population
 
+float CougToDeerRatio;
 int NowNumCougar;
 
-const float GRAIN_GROWS_PER_MONTH =	       12.0;
+const float GRAIN_GROWS_PER_MONTH =	       12.0; // I changed this from 12 to 15 to try to support more deer for the coug population
 const float ONE_DEER_EATS_PER_MONTH =		1.0;
 
 const float AVG_PRECIP_PER_MONTH =		7.0;	// average
@@ -125,8 +126,14 @@ void Deer()
         else
         if( nextNumDeer > carryingCapacity )
                 nextNumDeer--;
+
+        if( CougToDeerRatio > 0.3 )
+            nextNumDeer -= 2;
+
         if( nextNumDeer < 0 )
                 nextNumDeer = 0;
+
+
         WaitBarrier(); // 1.
         // Copy the computed next state to the Now state
         NowNumDeer = nextNumDeer;
@@ -141,11 +148,11 @@ void Cougar()
     while (NowYear < 2030)
     {
         int nextNumCougar = NowNumCougar;
-        float CougToDeerRatio = float (NowNumCougar) / float (NowNumDeer);
-        if( CougToDeerRatio < 0.5 )
+        CougToDeerRatio = float (NowNumCougar) / float (NowNumDeer);
+        if( CougToDeerRatio < 0.3 )
             nextNumCougar++;
         else
-        if ( CougToDeerRatio > 0.5 )
+        if ( CougToDeerRatio > 0.3 )
             nextNumCougar--;
         if ( nextNumCougar < 0 )
             nextNumCougar = 0;
@@ -192,10 +199,11 @@ int main(int argc, char *argv[])
     NowYear  = 2024;
 
     // starting state (feel free to change this if you want):
-    NowNumDeer = 20;
+    NowNumDeer = 10;
     NowHeight =  10.;
 
     NowNumCougar = 1;
+    CougToDeerRatio = float (NowNumCougar) / float (NowNumDeer);
 
     InitBarrier(4);
     omp_set_num_threads(4); // same as # of sections

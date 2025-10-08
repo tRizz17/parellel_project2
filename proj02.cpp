@@ -65,6 +65,7 @@ float	NowTemp;		// temperature this month
 float	NowHeight;		// grain height in inches
 int	NowNumDeer;		// number of deer in the current population
 
+int NowNumCougar;
 
 const float GRAIN_GROWS_PER_MONTH =	       12.0;
 const float ONE_DEER_EATS_PER_MONTH =		1.0;
@@ -128,11 +129,34 @@ void Deer()
                 nextNumDeer = 0;
         WaitBarrier(); // 1.
         // Copy the computed next state to the Now state
-        ???
+        NowNumDeer = nextNumDeer;
         WaitBarrier(); // 2.
         // // Do nothing
         WaitBarrier(); // 3.
     }
+}
+
+void Cougar()
+{
+    while (NowYear < 2030)
+    {
+        int nextNumCougar = NowNumCougar;
+        float CougToDeerRatio = float (NowNumCougar) / float (NowNumDeer);
+        if( CougToDeerRatio < 0.5 )
+            nextNumCougar++;
+        else
+        if ( CougToDeerRatio > 0.5 )
+            nextNumCougar--;
+        if ( nextNumCougar < 0 )
+            nextNumCougar = 0;
+        WaitBarrier();// 1
+        NowNumCougar = nextNumCougar;
+        WaitBarrier();// 2
+
+        WaitBarrier();// 3
+
+    }
+
 }
 
 void Grain()
@@ -152,7 +176,7 @@ void Grain()
         }
         WaitBarrier(); // 1.
         // Copy the computed next state to the Now state
-        ???
+        NowHeight = nextHeight;
         WaitBarrier(); // 2.
         // Do nothing
         WaitBarrier(); // 3.
@@ -168,7 +192,7 @@ int main(int argc, char *argv[])
     NowYear  = 2024;
 
     // starting state (feel free to change this if you want):
-    NowNumDeer = 2;
+    NowNumDeer = 14;
     NowHeight =  5.;
 
     InitBarrier(4);
@@ -192,7 +216,7 @@ int main(int argc, char *argv[])
 
 #pragma omp section
         {
-            ???(); // your own
+            Cougar(); // your own
         }
     } // implied barrier -- all functions must return in order
       // to allow any of them to get past here

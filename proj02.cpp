@@ -192,8 +192,10 @@ int main(int argc, char *argv[])
     NowYear  = 2024;
 
     // starting state (feel free to change this if you want):
-    NowNumDeer = 14;
-    NowHeight =  5.;
+    NowNumDeer = 20;
+    NowHeight =  10.;
+
+    NowNumCougar = 1;
 
     InitBarrier(4);
     omp_set_num_threads(4); // same as # of sections
@@ -216,7 +218,7 @@ int main(int argc, char *argv[])
 
 #pragma omp section
         {
-            Cougar(); // your own
+            Cougar();
         }
     } // implied barrier -- all functions must return in order
       // to allow any of them to get past here

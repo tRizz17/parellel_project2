@@ -68,7 +68,7 @@ int	NowNumDeer;		// number of deer in the current population
 float CougToDeerRatio;
 int NowNumCougar;
 
-const float GRAIN_GROWS_PER_MONTH =	       12.0; // I changed this from 12 to 15 to try to support more deer for the coug population
+const float GRAIN_GROWS_PER_MONTH =	       14.0; // I changed this from 12 to 14 to try to support more deer for the coug population
 const float ONE_DEER_EATS_PER_MONTH =		1.0;
 
 const float AVG_PRECIP_PER_MONTH =		7.0;	// average
@@ -122,13 +122,17 @@ void Deer()
         int nextNumDeer = NowNumDeer;
         int carryingCapacity = (int)( NowHeight );
         if( nextNumDeer < carryingCapacity )
-                nextNumDeer++;
+                nextNumDeer += 2;
         else
         if( nextNumDeer > carryingCapacity )
-                nextNumDeer--;
+                nextNumDeer -= 2;
 
         if( CougToDeerRatio > 0.3 )
             nextNumDeer -= 2;
+        else
+        if( CougToDeerRatio < 0.3)
+            nextNumDeer += 2;
+        
 
         if( nextNumDeer < 0 )
                 nextNumDeer = 0;
@@ -193,13 +197,14 @@ void Grain()
 int main(int argc, char *argv[])
 {
     printf("Year, Month, Precipitation, Grain Height, Num Deer, Num Cougar\n");
-
+    (void)argc;
+    (void)argv;
     // starting date and time:
     NowMonth =    0;
     NowYear  = 2024;
 
     // starting state (feel free to change this if you want):
-    NowNumDeer = 10;
+    NowNumDeer = 8;
     NowHeight =  10.;
 
     NowNumCougar = 1;

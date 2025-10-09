@@ -210,7 +210,7 @@ int main(int argc, char *argv[])
     NowYear  = 2024;
 
     // starting state (feel free to change this if you want):
-    NowNumDeer = 8;
+    NowNumDeer = 2;
     NowHeight =  10.;
 
     NowNumCougar = 1;

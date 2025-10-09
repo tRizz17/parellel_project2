@@ -133,6 +133,9 @@ void Deer()
         if( CougToDeerRatio < 0.3)
             nextNumDeer += 2;
         
+        else
+            nextNumDeer -= 1; // Ratio is balanced
+        
 
         if( nextNumDeer < 0 )
                 nextNumDeer = 0;
@@ -153,13 +156,16 @@ void Cougar()
     {
         int nextNumCougar = NowNumCougar;
         CougToDeerRatio = float (NowNumCougar) / float (NowNumDeer);
+
         if( CougToDeerRatio < 0.3 )
             nextNumCougar++;
         else
         if ( CougToDeerRatio > 0.3 )
             nextNumCougar--;
+
         if ( nextNumCougar < 0 )
             nextNumCougar = 0;
+
         WaitBarrier();// 1
         NowNumCougar = nextNumCougar;
         WaitBarrier();// 2
